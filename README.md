@@ -44,13 +44,13 @@ END:
 
 ### 出力 (機械語)
 ```
-0x2008_0005 # addi $t0, $zero, 5
-0x2010_0000 # addi $s0, $zero, 0
-0x0210_8020 # add $s0, $s0, $t0
-0x2108_ffff # addi $t0, $t0, -1
-0x1500_fffc # bne $t0, $zero, LOOP
-0x0800_0007 # j END
-0x0800_0007 # j END
+0x2008_0005	# addi $t0, $zero, 5
+0x2010_0000	# addi $s0, $zero, 0
+0x0208_8020	# add $s0, $s0, $t0
+0x2108_ffff	# addi $t0, $t0, -1
+0x1500_fffd	# bne $t0, $zero, LOOP
+0x0800_0006	# j END
+0x0800_0006	# j END
 ```
 
 ## サポートする命令一覧
