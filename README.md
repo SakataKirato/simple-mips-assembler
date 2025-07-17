@@ -62,6 +62,7 @@ END:
 | R形式  | `and`  | `and $d, $s, $t`        |
 | R形式  | `or`   | `or $d, $s, $t`         |
 | R形式  | `slt`  | `slt $d, $s, $t`        |
+| R形式  | `sll`  | `sll $d, $t, shamt`     |
 | I形式  | `addi` | `addi $t, $s, imm`      |
 | I形式  | `lw`   | `lw $t, offset($s)`     |
 | I形式  | `sw`   | `sw $t, offset($s)`     |
