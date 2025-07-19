@@ -48,6 +48,7 @@ INSTRUCTIONS = {
     'and': {'type': 'R', 'funct': 0x24},
     'or':  {'type': 'R', 'funct': 0x25},
     'slt': {'type': 'R', 'funct': 0x2a},
+    'sll': {'type': 'R', 'funct': 0x00},
     # I-type
     'addi': {'type': 'I', 'opcode': 0x08},
     'lw':   {'type': 'I', 'opcode': 0x23},
@@ -92,8 +93,23 @@ def assemble(line, symbol_table, current_address):
     if op_type == 'R':
         if len(operands) != 3:
             raise ValueError(f"'{mnemonic}' のオペランド数が正しくありません (3つ必要)")
-        rd, rs, rt = parse_register(operands[0]), parse_register(operands[1]), parse_register(operands[2])
-        binary_code = f"000000{to_binary(rs, 5)}{to_binary(rt, 5)}{to_binary(rd, 5)}00000{to_binary(info['funct'], 6)}"
+
+        if mnemonic == 'sll':
+            # sll $rd, $rt, shamt
+            rd, rt = parse_register(operands[0]), parse_register(operands[1])
+            try:
+                shamt = int(operands[2])
+                if not (0 <= shamt < 32):
+                    raise ValueError(f"'{mnemonic}' のシフト量は0から31の間の整数である必要があります")
+            except (ValueError, IndexError):
+                raise ValueError(f"'{mnemonic}' のシフト量は数値である必要があります")
+            rs = 0  # rs is not used in sll
+            binary_code = f"000000{to_binary(rs, 5)}{to_binary(rt, 5)}{to_binary(rd, 5)}{to_binary(shamt, 5)}{to_binary(info['funct'], 6)}"
+        else:
+            # other R-type: op $rd, $rs, $rt
+            rd, rs, rt = parse_register(operands[0]), parse_register(operands[1]), parse_register(operands[2])
+            shamt = 0
+            binary_code = f"000000{to_binary(rs, 5)}{to_binary(rt, 5)}{to_binary(rd, 5)}{to_binary(shamt, 5)}{to_binary(info['funct'], 6)}"
 
     elif op_type == 'I':
         opcode = to_binary(info['opcode'], 6)
